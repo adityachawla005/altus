@@ -27,7 +27,8 @@ img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 
 .display{font-weight:700;line-height:.84;letter-spacing:-.05em;text-transform:uppercase;text-wrap:balance}
-.xl{font-size:clamp(3rem,11vw,10rem)}
+.xl{font-size:clamp(3rem,11vw,10rem);text-wrap:nowrap}
+.xl span{white-space:nowrap}
 .lg{font-size:clamp(2.2rem,7vw,5.5rem)}
 .md{font-size:clamp(1.7rem,4vw,3rem);letter-spacing:-.035em}
 
@@ -57,10 +58,11 @@ header nav a{text-decoration:none}
 .cta:hover{background:var(--blue)}
 @media(max-width:760px){header nav{display:none}}
 
-.hero{padding:3.5rem 0 5rem;overflow:hidden}
-.hero h1 span{display:block}
-.hero h1 span:nth-child(2){margin-left:6vw}
-.hero h1 span:nth-child(3){margin-left:16vw}
+.hero{padding-top:3.5rem;padding-bottom:5rem;overflow:hidden}
+/* direct children only — the nested accent span must stay inline */
+.hero h1>span{display:block}
+.hero h1>span:nth-child(2){margin-left:6vw}
+.hero h1>span:nth-child(3){margin-left:16vw}
 .blue{color:var(--blue)}
 
 .rule{display:grid;gap:0;border-top:1px solid var(--line)}
