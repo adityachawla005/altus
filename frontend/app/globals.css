@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+/* ─── Altus design system ──────────────────────────────────────────────
+   Architectural blueprint. Off-white ground, hairline grid, colossal
+   tight display type, one electric blue that only ever means "machine".
+   Black means money moved. Red means policy stopped it.
+   ──────────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  --color-paper: #f7f7f7;
+  --color-chalk: #fefefe;
+  --color-ink: #111111;
+  --color-graphite: #212121;
+  --color-muted: #8a8a8a;
+  --color-line: #e0e0e0;
+  --color-hair: #d4d4d4;
+  --color-blue: #0031f5;
+  --color-blue-soft: #e8ecff;
+  --color-halt: #d81e2c;
+  --color-halt-soft: #fdecee;
+  --color-hold: #b26a00;
+  --color-hold-soft: #fdf3e2;
+
+  --font-display: var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  color-scheme: light;
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  overflow-x: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--color-blue) 18%, transparent);
+}
+
+/* One focus ring for everything, drawn outside the element so it survives the
+   hairline borders. :focus-visible only — a mouse click should not ring. */
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+/* Sticky headers must not cover what the keyboard just focused. */
+:target,
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  z-index: 200;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-ink);
+  color: var(--color-chalk);
+}
+
+/* ─── Type ─────────────────────────────────────────────────────────── */
+
+/* Display: as large as the viewport allows, tracking tightening as it grows.
+   The negative tracking is the whole point — it is what stops big type
+   reading as "big body text". */
+.display {
+  font-weight: 700;
+  text-wrap: balance;
+  line-height: 0.84;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+.display-xl { font-size: clamp(3.25rem, 11.5vw, 10.5rem); }
+.display-lg { font-size: clamp(2.5rem, 7.5vw, 6rem); }
+.display-md { font-size: clamp(1.9rem, 4.4vw, 3.25rem); letter-spacing: -0.035em; }
+
+/* Mono micro-label — always paired with .tick, always uppercase. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.label-ink { color: var(--color-graphite); }
+
+/* The small blue square that prefixes a label. Lifted straight from the
+   reference: it is the one recurring mark that ties every surface together. */
+.tick::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 0.6em;
+  vertical-align: 0.12em;
+  background: var(--color-blue);
+}
+
+.slash { color: var(--color-muted); }
+.slash::before {
+  content: "// ";
+  color: var(--color-blue);
+}
+
+/* ─── Structure ────────────────────────────────────────────────────── */
+
+/* The page-wide hairline gutters. Two vertical rules that run the full
+   height, exactly as the reference does — cheap, and it is what makes the
+   whole thing read as a drawing rather than a document. */
+.rule-frame {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-left: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+  margin: 0 clamp(0.75rem, 2.2vw, 2rem);
+}
+
+.hair { border-color: var(--color-line); }
+
+/* Blueprint graph paper, used behind 3D so the model reads as a drawing. */
+.graph {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 35%, transparent 78%);
+}
+
+/* ─── Motion ───────────────────────────────────────────────────────── */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes blink {
+  50% { opacity: 0.15; }
+}
+@keyframes sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(400%); }
+}
+
+.rise { animation: rise 0.9s var(--ease-out-expo) both; }
+.wipe { animation: wipe 1.1s var(--ease-out-expo) both; }
+.blink { animation: blink 1.1s steps(1) infinite; }
+
+/* Staircase hero lines: each line starts further right than the last and
+   arrives a beat later. */
+.stair > * { animation: rise 1s var(--ease-out-expo) both; }
+.stair > *:nth-child(2) { animation-delay: 0.09s; }
+.stair > *:nth-child(3) { animation-delay: 0.18s; }
+
+/* ─── Controls ─────────────────────────────────────────────────────── */
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.6rem;
+  background: var(--color-ink);
+  color: var(--color-chalk);
+  border: 1px solid var(--color-ink);
+  transition: background 0.25s, color 0.25s;
+}
+.btn:hover:not(:disabled) { background: var(--color-blue); border-color: var(--color-blue); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-hair);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--color-ink); color: var(--color-chalk); border-color: var(--color-ink); }
+
+/* Inputs are underlines, not boxes — boxes inside boxes is the card-spam
+   failure mode this design is trying to avoid. */
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-hair);
+  padding: 0.6rem 0 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-ink);
+  transition: border-color 0.2s;
+}
+.field:focus { border-color: var(--color-blue); }
+select.field {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  border-radius: 0;
+}
+.field::placeholder { color: var(--color-muted); }
+
+/* Underline that draws in from the left on hover. */
+.ul {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s var(--ease-out-expo);
+}
+.ul:hover { background-size: 100% 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
