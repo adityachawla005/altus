@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Altus — two front doors</title>
+<meta name="description" content="One small merchant, transactable twice over: a chat storefront for people and a machine endpoint with a spending passport for AI buyers. Policy enforced in code, not by the model.">
+<meta property="og:title" content="Altus — two front doors">
+<meta property="og:description" content="A chat storefront for humans and a machine endpoint with a spending passport for AI buyers. Policy enforced in code, not by the model.">
+<meta property="og:image" content="screenshots/home-hero.png">
+<meta name="theme-color" content="#f7f7f7">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f7f7f7'/><rect x='6' y='6' width='20' height='20' fill='none' stroke='%230031f5' stroke-width='3'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f7f7; --chalk:#fefefe; --ink:#111; --graphite:#212121;
+  --muted:#8a8a8a; --line:#e0e0e0; --blue:#0031f5;
+  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{margin:0;font-family:var(--display);color:var(--ink);overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+
+.display{font-weight:700;line-height:.84;letter-spacing:-.05em;text-transform:uppercase;text-wrap:balance}
+.xl{font-size:clamp(3rem,11vw,10rem)}
+.lg{font-size:clamp(2.2rem,7vw,5.5rem)}
+.md{font-size:clamp(1.7rem,4vw,3rem);letter-spacing:-.035em}
+
+.label{font-family:var(--mono);font-size:.6875rem;line-height:1.5;letter-spacing:.09em;
+       text-transform:uppercase;color:var(--muted)}
+.label.ink{color:var(--graphite)}
+.tick::before{content:"";display:inline-block;width:5px;height:5px;margin-right:.6em;
+              vertical-align:.12em;background:var(--blue)}
+.slash::before{content:"// ";color:var(--blue)}
+
+.pad{padding-left:clamp(1rem,2.4vw,2rem);padding-right:clamp(1rem,2.4vw,2rem)}
+section{border-bottom:1px solid var(--line);position:relative}
+.frame{position:fixed;inset:0;pointer-events:none;z-index:1;
+       border-left:1px solid var(--line);border-right:1px solid var(--line);
+       margin:0 clamp(.75rem,2.2vw,2rem)}
+
+header{display:flex;align-items:stretch;border-bottom:1px solid var(--line);
+       position:relative;z-index:2;background:var(--paper)}
+.mark{display:flex;align-items:center;border-right:1px solid var(--line);
+      padding:1rem clamp(1rem,2.4vw,2rem);font-weight:700;font-size:1.125rem;
+      letter-spacing:-.03em;text-decoration:none}
+header nav{display:flex;align-items:center;gap:2rem;padding:0 2rem;flex:1}
+header nav a{text-decoration:none}
+.cta{display:flex;align-items:center;padding:1rem 1.6rem;background:var(--ink);
+     color:var(--chalk);font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;
+     text-transform:uppercase;text-decoration:none;transition:background .25s;margin-left:auto}
+.cta:hover{background:var(--blue)}
+@media(max-width:760px){header nav{display:none}}
+
+.hero{padding:3.5rem 0 5rem;overflow:hidden}
+.hero h1 span{display:block}
+.hero h1 span:nth-child(2){margin-left:6vw}
+.hero h1 span:nth-child(3){margin-left:16vw}
+.blue{color:var(--blue)}
+
+.rule{display:grid;gap:0;border-top:1px solid var(--line)}
+@media(min-width:860px){.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.15)}}
+.dark{background:var(--ink);color:var(--chalk)}
+.dark .label{color:var(--muted)}
+.rules>div{background:var(--ink);padding:2rem}
+.rules h3{margin:1.5rem 0 .5rem;font-size:1.0625rem}
+.rules p{margin:0;font-size:.875rem;line-height:1.65;color:rgba(255,255,255,.65)}
+
+.shots{display:grid;gap:2.5rem}
+@media(min-width:900px){.shots{grid-template-columns:1fr 1fr}}
+figure{margin:0}
+figure img{border:1px solid var(--line);background:var(--chalk)}
+figcaption{margin-top:.75rem}
+.phone img{max-width:300px;margin:0 auto}
+
+.grid2{display:grid;gap:3rem}
+@media(min-width:900px){.grid2{grid-template-columns:1fr 1.5fr;gap:4rem}}
+
+table{width:100%;border-collapse:collapse;font-size:.9375rem}
+td,th{text-align:left;padding:1.1rem 1rem 1.1rem 0;border-bottom:1px solid var(--line);
+      vertical-align:top}
+th{font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;
+   color:var(--muted);font-weight:400}
+td:first-child{font-family:var(--mono);font-size:.8125rem;white-space:nowrap;padding-right:2rem}
+.scroll{overflow-x:auto}
+
+pre{background:var(--ink);color:#e8e8e8;padding:1.75rem;overflow-x:auto;
+    font-family:var(--mono);font-size:.8125rem;line-height:1.7;margin:0}
+pre .c{color:#7f8fa8}
+pre .b{color:#7fa0ff}
+
+.btn{display:inline-block;padding:.95rem 1.6rem;background:var(--ink);color:var(--chalk);
+     font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;
+     text-decoration:none;border:1px solid var(--ink);transition:background .25s,color .25s}
+.btn:hover{background:var(--blue);border-color:var(--blue)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:#d4d4d4}
+.btn.ghost:hover{background:var(--ink);color:var(--chalk);border-color:var(--ink)}
+
+.note{border-left:2px solid var(--blue);padding-left:1.25rem}
+footer{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+       align-items:baseline;padding:2.5rem clamp(1rem,2.4vw,2rem)}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="frame" aria-hidden="true"></div>
+
+<header>
+  <a class="mark" href="#top">ALTUS</a>
+  <nav>
+    <a class="label" href="#how">How it works</a>
+    <a class="label" href="#policy">Policy</a>
+    <a class="label" href="#surfaces">Surfaces</a>
+    <a class="label" href="#run">Run it</a>
+  </nav>
+  <a class="cta" href="https://github.com/adityachawla005/altus">View on GitHub ↗</a>
+</header>
+
+<section id="top" class="hero pad">
+  <p class="label tick ink" style="margin:0 0 2rem">Bengaluru, IN</p>
+  <h1 class="display xl"><span>Two</span><span>Front</span><span>Doors<span class="blue">*</span></span></h1>
+  <p class="label tick" style="max-width:26rem;margin-top:3rem;line-height:1.8">
+    One small merchant, made transactable twice over — once for people,
+    once for the agents buying on their behalf.
+  </p>
+  <p style="margin-top:2rem;display:flex;gap:.75rem;flex-wrap:wrap">
+    <a class="btn" href="https://github.com/adityachawla005/altus">Read the source</a>
+    <a class="btn ghost" href="#run">Run it locally</a>
+  </p>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <img src="screenshots/home-hero.png" alt="The Altus landing page: colossal display type over a blue wireframe amphitheatre" style="border-bottom:1px solid var(--line)">
+</section>
+
+<section id="how" class="pad" style="padding-top:5rem;padding-bottom:5rem">
+  <p class="slash label" style="margin:0 0 3rem">The problem</p>
+  <div class="grid2">
+    <h2 class="display lg" style="margin:0">Agents are<br>starting<br>to buy things</h2>
+    <div>
+      <p style="font-size:1.125rem;line-height:1.7;margin-top:0">
+        Nobody has told the merchant how to say <strong>“₹2000 is fine, ₹4500 needs me.”</strong>
+      </p>
+      <p style="line-height:1.8;color:var(--graphite)">
+        Every autonomous-shopping demo puts that decision inside the model’s prompt —
+        which means the guardrail is a suggestion, and the merchant is trusting a
+        stranger’s language model with their inventory and their money.
+      </p>
+      <p class="note" style="line-height:1.8">
+        Altus moves the decision out of the model and into the merchant’s code path.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="policy" class="dark pad" style="padding-top:5rem;padding-bottom:5rem">
+  <p class="slash label" style="margin:0 0 3rem">Policy</p>
+  <h2 class="display lg" style="max-width:16ch;margin:0">Enforced in code, not by the model</h2>
+  <p class="label" style="max-width:46ch;margin-top:2rem;line-height:1.8">
+    <code class="blue">llm.pick()</code> only proposes a product.
+    <code class="blue">run_agent()</code> decides what happens to it, in this order.
+  </p>
+  <div class="rules" style="margin-top:3.5rem">
+    <div><p class="label">01</p><h3>Over the autonomous cap</h3><p>Blocked, then escalated to the merchant.</p></div>
+    <div><p class="label">02</p><h3>Over the confirmation line</h3><p>Escalated. Waits for a human.</p></div>
+    <div><p class="label">03</p><h3>Within policy</h3><p>Order created, stock decremented, receipt returned.</p></div>
+  </div>
+  <p class="label" style="margin-top:3rem;max-width:60ch;line-height:1.8">
+    The agent below was given a ₹5000 budget. It had the money and still could not
+    spend it, because the merchant’s cap is ₹2000.
+  </p>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <img src="screenshots/demo-blocked.png" alt="The agent bench: a live step tape, then a red verdict screen reading STOPPED — Titan Analog Wrist Watch, ₹4,500, exceeds max autonomous spend">
+</section>
+
+<section id="surfaces" class="pad" style="padding-top:5rem;padding-bottom:5rem">
+  <p class="slash label" style="margin:0 0 3rem">Five surfaces</p>
+  <div class="scroll">
+    <table>
+      <tr><th>Page</th><th>What it does</th></tr>
+      <tr><td>/onboard</td><td>Shop details, catalog builder, agent policy → merchant id, QR code, agent endpoint</td></tr>
+      <tr><td>/shop/[id]</td><td>Mobile-first chat storefront; a Razorpay link closes the sale in-chat</td></tr>
+      <tr><td>/dashboard/[id]</td><td>Live audit trail, filterable by completed / blocked / escalated</td></tr>
+      <tr><td>/demo</td><td>Give an agent a task and a budget, watch each step stream in over SSE</td></tr>
+      <tr><td>/api/agent/[id]</td><td>The Agent Passport — catalog plus the rules a machine buyer must obey</td></tr>
+    </table>
+  </div>
+
+  <div class="shots" style="margin-top:4rem">
+    <figure>
+      <img src="screenshots/dashboard.png" alt="Audit trail showing money moved and money held as large figures, above a timestamped log">
+      <figcaption class="label">Audit trail — money moved and money held, set as headlines</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/onboard.png" alt="Onboarding form with numbered sections and underline fields">
+      <figcaption class="label">Onboarding — catalog and agent policy in about a minute</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/loader.png" alt="Loading screen: a blue wireframe amphitheatre drawing itself in beside a large percentage counter">
+      <figcaption class="label">The amphitheatre draws itself in as the counter runs</figcaption>
+    </figure>
+    <figure class="phone">
+      <img src="screenshots/shop-phone.png" alt="The storefront on a phone, mid-conversation, suggesting a product with a price">
+      <figcaption class="label" style="text-align:center">Scan the QR, buy from a phone — no app, no account</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pad" style="padding-top:5rem;padding-bottom:5rem">
+  <p class="slash label" style="margin:0 0 3rem">The passport</p>
+  <div class="grid2">
+    <div>
+      <h2 class="display md" style="margin:0">What a machine buyer reads</h2>
+      <p class="label" style="margin-top:1.5rem;line-height:1.8">
+        <code>purchase_allowed</code> is computed per product against the merchant’s
+        policy — the agent is told what it may buy before it tries.
+      </p>
+    </div>
+<pre><span class="c">GET /api/agent/sharma_gifts</span>
+
+{
+  <span class="b">"merchant"</span>: { "id": "sharma_gifts", … },
+  <span class="b">"capabilities"</span>: ["browse", "purchase",
+                     "check_inventory"],
+  <span class="b">"products"</span>: [
+    { "name": "Mysore Sandal Soap Set",
+      "price": 249,
+      "purchase_allowed": <span class="b">true</span> },
+    { "name": "Titan Analog Wrist Watch",
+      "price": 4500,
+      "purchase_allowed": <span class="b">false</span> }
+  ],
+  <span class="b">"rules"</span>: {
+    "max_autonomous_spend": 2000,
+    "requires_confirmation_above": 1500
+  }
+}</pre>
+  </div>
+</section>
+
+<section id="run" class="pad" style="padding-top:5rem;padding-bottom:5rem">
+  <p class="slash label" style="margin:0 0 3rem">Run it</p>
+  <div class="grid2">
+    <div>
+      <h2 class="display md" style="margin:0">Two commands<br>and a browser</h2>
+      <p class="label" style="margin-top:1.5rem;line-height:1.8">
+        Both API keys are optional. Without them the model falls back to a
+        deterministic keyword matcher and checkout is simulated — and labelled
+        as such, everywhere it appears.
+      </p>
+      <p style="margin-top:2rem">
+        <a class="btn" href="https://github.com/adityachawla005/altus">Full README ↗</a>
+      </p>
+    </div>
+<pre>git clone https://github.com/adityachawla005/altus
+cd altus
+
+python3 -m venv backend/.venv
+backend/.venv/bin/pip install -r backend/requirements.txt
+(cd frontend &amp;&amp; npm install)
+
+cp .env.example .env
+./dev.sh
+
+<span class="c">  this machine   http://localhost:3000</span>
+<span class="c">  on the LAN     http://192.168.1.20:3000</span></pre>
+  </div>
+
+  <p class="label" style="margin-top:3.5rem;max-width:70ch;line-height:1.8">
+    <strong class="ink">On the money.</strong> The autonomous path creates a real
+    test-mode order and books it as <code>PAID_TEST_MODE</code>. Razorpay has no
+    server-side API to pay an order without a checkout, so nothing here claims a
+    captured payment it didn’t get. The human path is a genuine end-to-end
+    test-mode payment.
+  </p>
+</section>
+
+<footer>
+  <p class="label tick ink" style="margin:0">Altus · MIT</p>
+  <p class="label" style="margin:0">
+    <a href="https://github.com/adityachawla005/altus">github.com/adityachawla005/altus</a>
+  </p>
+</footer>
+</body>
+</html>
