@@ -41,6 +41,11 @@ Next.js owns no API routes. `frontend/next.config.ts` rewrites `/api/*` to
 FastAPI on `:8000`, so the browser, a phone on the LAN, and a third-party
 agent all hit the same origin and the same code.
 
+![Altus architecture](docs/screenshots/architecture.png)
+
+The purple box is the only place a language model touches the request. Every
+box after it is plain Python — which is the whole argument.
+
 ## Policy is enforced in code, not by the model
 
 `llm.pick()` only **proposes** a product. `run_agent()` in `backend/main.py`
