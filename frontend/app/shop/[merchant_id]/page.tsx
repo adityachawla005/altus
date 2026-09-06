@@ -154,7 +154,7 @@ export default function Shop() {
               <p className="mt-2 text-sm text-graphite">{payment.product.name}</p>
               <p className="label mt-3 leading-relaxed">
                 Order {payment.order_id}
-                {payment.simulated && " · simulated, no Razorpay keys set"}
+                {payment.simulated && " · simulated checkout"}
               </p>
               <a
                 href={payment.checkout_url}

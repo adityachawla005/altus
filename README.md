@@ -5,7 +5,7 @@
 **One small merchant, transactable twice over — once for people, once for the agents buying on their behalf.**
 
 A chat storefront for humans and a machine endpoint with a spending passport for AI buyers.
-One catalog, one audit trail, Razorpay test mode underneath.
+One catalog, one audit trail, simulated checkout underneath.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-111111?style=flat-square)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-111111?style=flat-square)](https://react.dev)
@@ -72,7 +72,7 @@ money and still could not spend it, because the merchant's cap is ₹2000.
 | Page | What it does |
 |---|---|
 | `/onboard` | Shop details, catalog builder, agent policy → merchant id, QR code, agent endpoint |
-| `/shop/[merchant_id]` | Mobile-first chat storefront; Claude reads the catalog, a Razorpay link closes the sale in-chat |
+| `/shop/[merchant_id]` | Mobile-first chat storefront; Claude reads the catalog, a checkout link closes the sale in-chat |
 | `/dashboard/[merchant_id]` | Live audit trail, filterable by completed / blocked / escalated |
 | `/demo` | Give an agent a task and a budget, watch each step stream in over SSE |
 | `/api/agent/[merchant_id]` | The Agent Passport — catalog plus the rules a machine buyer must obey |
@@ -98,7 +98,7 @@ python3 -m venv backend/.venv
 backend/.venv/bin/pip install -r backend/requirements.txt
 (cd frontend && npm install)
 
-cp .env.example .env      # keys optional, see below
+cp .env.example .env      # key optional, see below
 ./dev.sh
 ```
 
@@ -124,7 +124,7 @@ backend/.venv/bin/python backend/test_altus.py
 GET  /api/agent/{merchant_id}            Agent Passport + catalog
 POST /api/agent/{merchant_id}/buy        Autonomous purchase  (?stream=1 for SSE)
 POST /api/chat/{merchant_id}             Human chat with the shop
-POST /api/payment/create                 Razorpay payment link
+POST /api/payment/create                 Checkout link for a product
 POST /api/payment/verify                 Confirm a payment (signature or link status)
 GET  /api/audit/{merchant_id}            Full audit trail
 POST /api/merchants                      Onboard a merchant
@@ -152,23 +152,34 @@ agent is told what it may buy before it tries.
 
 ## Keys
 
-Both are optional; Altus degrades to something you can still demo.
+`ANTHROPIC_API_KEY` is the only key that changes anything, and Altus degrades
+to something you can still demo without it.
 
 | Variable | Without it |
 |---|---|
 | `ANTHROPIC_API_KEY` | Chat and the agent fall back to a deterministic keyword/price matcher. Responses report `"model": "fallback"`. |
-| `RAZORPAY_KEY_ID` / `_SECRET` | Checkout is simulated: ids are prefixed `sim_`, receipts carry `simulated: true`. A merchant may supply its own keys at onboarding, which take precedence. |
 | `PUBLIC_BASE_URL` | Only needed behind a real domain or tunnel. Left unset, the server works out the LAN address a phone can reach, so QR codes resolve off-device on whatever network you are on. |
 
 ## Notes on the money
 
 Money is whole rupees in `INTEGER` columns everywhere; paise conversion happens
-only at the Razorpay boundary.
+only at the payment boundary, in `backend/pay.py`.
 
-The autonomous path creates a real test-mode order and books it as
-`PAID_TEST_MODE` — Razorpay has no server-side API to actually pay an order
-without a checkout, so **nothing here claims a captured payment it didn't
-get**. The human path is a genuine end-to-end test-mode payment.
+**Checkout is simulated on every path.** `pay.creds()` returns no credentials
+unconditionally, so no Razorpay call is ever made: ids are prefixed `sim_`,
+receipts carry `simulated: true`, and both the storefront and the agent bench
+print that next to the status. Keeping the decision at the payment boundary
+rather than in the callers is the point — credentials left over from an earlier
+onboarding can't turn a chat reply into a failed network payment.
+
+The REST calls, the HMAC signature check and the real/simulated split all
+remain in `pay.py`; switching live test mode back on is a matter of `creds()`
+reading the merchant row and the environment again.
+
+Either way, **nothing here claims a captured payment it didn't get**. The
+autonomous path books its order as `PAID_TEST_MODE` — a distinct status the
+audit trail carries verbatim — because Razorpay has no server-side API to pay
+an order without a checkout.
 
 ## The 3D is generated, not downloaded
 

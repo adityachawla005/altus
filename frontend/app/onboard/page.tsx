@@ -62,7 +62,6 @@ function Field({
 export default function Onboard() {
   const [form, setForm] = useState({
     name: "", description: "", brand_color: "#0031f5",
-    razorpay_key_id: "", razorpay_key_secret: "",
     max_autonomous_spend: "2000", requires_confirmation_above: "1500",
     substitution_allowed: false,
   });
@@ -196,27 +195,9 @@ export default function Onboard() {
             <span className="label">{form.brand_color}</span>
           </label>
 
-          <div className="grid gap-8 sm:grid-cols-2">
-            <Field
-              label="Razorpay test key id"
-              name="razorpay_key_id"
-              spellCheck={false}
-              value={form.razorpay_key_id}
-              placeholder="rzp_test_…"
-              onChange={(e) => set("razorpay_key_id", e.target.value)}
-            />
-            <Field
-              label="Razorpay test key secret"
-              name="razorpay_key_secret"
-              spellCheck={false}
-              type="password"
-              value={form.razorpay_key_secret}
-              onChange={(e) => set("razorpay_key_secret", e.target.value)}
-            />
-          </div>
           <p className="label leading-relaxed">
-            Leave blank to use the server&apos;s keys, or none at all — payments are then
-            simulated and labelled as such.
+            Checkout is simulated and clearly labelled as such. No payment credentials
+            are required.
           </p>
         </Step>
 

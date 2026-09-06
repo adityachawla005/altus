@@ -21,10 +21,12 @@ BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:3000")
 
 
 def creds(merchant: dict | None = None):
-    m = merchant or {}
-    kid = m.get("razorpay_key_id") or os.getenv("RAZORPAY_KEY_ID", "")
-    sec = m.get("razorpay_key_secret") or os.getenv("RAZORPAY_KEY_SECRET", "")
-    return (kid, sec) if kid and sec else (None, None)
+    """Altus currently runs checkout entirely in simulated mode.
+
+    Keep this decision at the payment boundary so credentials left over from an
+    earlier onboarding cannot turn a chat reply into a failed network payment.
+    """
+    return (None, None)
 
 
 def _call(method, path, cred, body=None):

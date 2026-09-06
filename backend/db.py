@@ -121,7 +121,7 @@ def create_merchant(m: dict, products: list[dict]) -> str:
             "substitution_allowed,refund_authority,created_at)"
             " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (mid, m["name"], m.get("description", ""), m.get("brand_color") or "#4f46e5",
-             m.get("razorpay_key_id", ""), m.get("razorpay_key_secret", ""),
+             "", "",
              int(m.get("max_autonomous_spend", 2000)),
              int(m.get("requires_confirmation_above", 1500)),
              int(bool(m.get("substitution_allowed"))),

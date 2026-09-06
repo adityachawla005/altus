@@ -9,7 +9,7 @@ import Loader from "./components/Loader";
 const Amphitheatre = dynamic(() => import("./components/Amphitheatre"), { ssr: false });
 
 const USES = [
-  ["[₹]", "Human buyers", "A chat storefront that reads the catalog, answers in plain language, and closes with a Razorpay link — no app, no account, just a QR code."],
+  ["[₹]", "Human buyers", "A chat storefront that reads the catalog, answers in plain language, and closes with a checkout link — no app, no account, just a QR code."],
   ["[◎]", "Machine buyers", "An Agent Passport: the catalog plus the rules a machine must obey. Published at one URL, versioned with the merchant's policy."],
   ["[§]", "The merchant", "One audit trail for both. Every query, selection, block and escalation, timestamped with the amount and the reason."],
 ];
@@ -226,7 +226,7 @@ export default function Home() {
 
       <footer className="relative z-10 flex flex-wrap items-baseline justify-between gap-4 border-t border-line px-[clamp(1rem,2.4vw,2rem)] py-10">
         <p className="label tick label-ink">Altus</p>
-        <p className="label">Razorpay test mode · money in whole rupees · INR</p>
+        <p className="label">Simulated checkout · money in whole rupees · INR</p>
       </footer>
     </>
   );
